@@ -8,8 +8,8 @@ app.use(express.json())
 todos = [{
     "id": 1,
     "content": "Learn React",
-    "days": "daily",
-    "done": true
+    "day": "monday",
+    "done": false
 }]
 
 app.get('/api/todos', (request, response) => {
@@ -42,7 +42,7 @@ app.post('/api/todos', (request, response) => {
     const newTodo = {
         id: maxId + 1,
         content: todo.todo,
-        days: todo.days,
+        day: todo.day,
         done: false,
     }
 
@@ -53,9 +53,10 @@ app.post('/api/todos', (request, response) => {
 
 app.put('/api/todos', (request, response) => {
     const todoId = request.body.id
+    console.log(request.body)
 
     //map that return either the same todo or the todo with the todo.done attribute changed
-    todos = todos.map(todo => todo.id != todoId ? todo : { id: todo.id, todo: todo.todo, days: todo.days, done: !todo.done })
+    todos = todos.map(todo => todo.id != todoId ? todo : { id: todo.id, content: todo.content, day: todo.day, done: !todo.done })
 
     response.json(todoId)
 })
