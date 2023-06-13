@@ -12,6 +12,8 @@ todos = [{
     "done": false
 }]
 
+score = 0
+
 app.get('/api/todos', (request, response) => {
     response.json(todos)
 })
@@ -25,6 +27,15 @@ app.get('/api/todos/:id', (request, response) => {
     } else {
         response.status(404).end()
     }
+})
+
+app.get('/api/score', (request, response) => {
+    response.json(score)
+})
+
+app.put('/api/score', (request, response) => {
+    score++
+    response.json(score)
 })
 
 app.delete('/api/todos/:id', (request, response) => {
