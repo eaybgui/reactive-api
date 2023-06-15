@@ -34,7 +34,12 @@ app.get('/api/score', (request, response) => {
 })
 
 app.put('/api/score', (request, response) => {
-    score++
+    console.log(request)
+    if (request.body.operation) {
+        score++
+    } else {
+        score--
+    }
     response.json(score)
 })
 
