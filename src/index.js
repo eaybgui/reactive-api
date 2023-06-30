@@ -34,7 +34,6 @@ app.get('/api/score', (request, response) => {
 })
 
 app.put('/api/score', (request, response) => {
-    console.log(request)
     if (request.body.operation) {
         score++
     } else {
@@ -45,6 +44,7 @@ app.put('/api/score', (request, response) => {
 
 app.delete('/api/todos/:id', (request, response) => {
     const id = request.params.id
+    console.log(request)
     todos = todos.filter(todo => todo.id != id)
     response.status(204).end()
 })
