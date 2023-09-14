@@ -1,21 +1,18 @@
 const todosRouter = require('express').Router()
-const Todo = require('../models/toDo')
 const User = require('../models/user')
+const Todo = require('../models/toDo')
 
-const refresh = async () => {
-  const day = new Date().getDay()
-  if(day === 1)
-    await Todo.find({}).updateMany({done: false})
-}
 
-refresh()
-
-todosRouter.get('/', async (request, response) => {
-  const todos = await Todo.find({})
-  response.status(200).json(todos)
+todosRouter.get('/', async (request, response, next) => {
+  try{
+    const todos = await Todo.find({ user: request.user.id })
+    response.status(200).json(todos)
+  }catch(exception){
+    next(exception)
+  }
 })
 
-todosRouter.get('/:id', async (request, response) => {
+todosRouter.get('/:id', async (request, response, next) => {
   const id = request.params.id
   try{
   const todo = await Todo.findById(id)
@@ -37,7 +34,7 @@ todosRouter.post('/', async (request, response, next) => {
   try{
     const user = await User.findById(request.user.id)
 
-    console.log(user, request.user)
+    // console.log(user, request.user)
     if(content){
       const todo = new Todo({
         content,
@@ -68,5 +65,13 @@ todosRouter.put('/:id', async (request, response, next) => {
     next(exception)
   }
 })
+
+const refresh = async () => {
+  const day = new Date().getDay()
+  if(day === 1)
+    await Todo.find({}).updateMany({done: false})
+}
+
+refresh()
 
 module.exports = todosRouter

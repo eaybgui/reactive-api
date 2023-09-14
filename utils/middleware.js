@@ -4,12 +4,12 @@ require('dotenv').config()
 const userExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
   if(authorization && authorization.toLowerCase().startsWith('bearer ')){
-      const token = authorization.substring(7)
-      const decodedToken = jwt.verify(token, process.env.SECRET)
-      if (!token || !decodedToken.id) {
-          return response.status(401).json({ error: 'token missing or invalid' })
-      }
-      request.user = decodedToken
+    const token = authorization.substring(7)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        return response.status(401).json({ error: 'token missing or invalid' })
+    }
+    request.user = decodedToken
   }
   next()
 }
@@ -26,8 +26,9 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-const unknownEndpoint = (request, response) => {
+const unknownEndpoint = (request, response, next) => {
   response.status(404).send({ error: 'unknown endpoint' })
+  next()
 }
 
 module.exports = {

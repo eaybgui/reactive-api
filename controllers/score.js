@@ -1,9 +1,8 @@
 const scoreRouter = require('express').Router()
 const User = require('../models/user')
 
-scoreRouter.get('/', async (request, response) => {
+scoreRouter.get('/', async (request, response, next) => {
   try{
-    
     const user = await User.findById(request.user.id)
     response.json(user.score)
   }catch(exception){
