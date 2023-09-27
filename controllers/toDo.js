@@ -29,26 +29,28 @@ todosRouter.delete('/:id', async (request, response) => {
 })
 
 todosRouter.post('/', async (request, response, next) => {
-  const {content, done, day} = request.body
   
   try{
     const user = await User.findById(request.user.id)
-
-    // console.log(user, request.user)
-    if(content){
-      const todo = new Todo({
-        content,
-        done: done || false,
-        user: user.id,
-        day
-      })
-      const savedTodo = await todo.save()
-      user.todos = user.todos.concat(savedTodo.id)
-      await user.save()
-      response.status(201).json(savedTodo)
-    }else{
-      response.status(400).end()
+    let todos = []
+    for(let i of request.body){
+      console.log(i)
+      if(i.content){
+        const todo = new Todo({
+          content: i.content,
+          done: false,
+          user: user.id,
+          day: i.day
+        })
+        const savedTodo = await todo.save()
+        todos.push(savedTodo)
+        user.todos = user.todos.concat(savedTodo.id)
+      }else{
+        response.status(400).end()
+      }
     }
+    await user.save()
+    response.status(201).json(todos)
   }catch(exception){
     next(exception)
   }

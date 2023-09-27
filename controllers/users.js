@@ -17,6 +17,7 @@ usersRouter.post('/', async (request, response) => {
     })
     
     try{
+      //check if username is unique
       const savedUser = await user.save()
       response.json(savedUser)
     }catch(exception){
