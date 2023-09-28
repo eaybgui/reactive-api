@@ -19,6 +19,7 @@ mongoose.connect(config.MONGODB_URI)
     .catch((error) => {
         logger.error('error connecting to MongoDB:', error.message)
     })
+console.log('url: ', config.MONGODB_URI.substring(0, 20))
 
 app.use(cors())
 app.use(express.json())
